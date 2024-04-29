@@ -31,16 +31,19 @@ interface Pokemon {
 }
 
 interface DetailedPokemon extends Omit<Pokemon, "types"> {
-  types: MetaData[];
+  types: {
+    slot: number;
+    type: MetaData;
+  }[];
 }
 
 interface RawPokemon {
   id: number;
   name: string;
   types: {
-    slot: number,
-    type: MetaData
-  }[],
+    slot: number;
+    type: MetaData;
+  }[];
   sprites: {
     front_default: string;
     other: {
@@ -54,15 +57,11 @@ interface RawPokemon {
   };
 }
 
-export async function getPokemonList(
-  pagination: Pagination = {
-    limit: 10,
-    offset: 0,
-  }
-): Promise<
-  Pagination & {
-    data: Pokemon[];
-  }
+export async function getPokemonList(pagination: Pagination): Promise<
+  Pagination &
+    Pick<BaseResponse, "count"> & {
+      data: Pokemon[];
+    }
 > {
   const response = await axios.get<PokemonList>(
     `${BASE_URL}/pokemon?limit=${pagination.limit}&offset=${pagination.offset}`
@@ -78,6 +77,7 @@ export async function getPokemonList(
     data: pokemonList,
     limit: pagination.limit,
     offset: pagination.offset,
+    count: response.data.count,
   };
 }
 

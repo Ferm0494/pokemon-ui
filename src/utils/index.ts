@@ -4,7 +4,7 @@ export const sanitizeURLQueryPaginationParams = (params: {
 }) => {
   const limit = params.limit
     ? parseInt(Array.isArray(params.limit) ? params.limit[0] : params.limit)
-    : 10;
+    : 12;
   const offset = params.offset
     ? parseInt(Array.isArray(params.offset) ? params.offset[0] : params.offset)
     : 0;
