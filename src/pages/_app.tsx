@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
         }
         // If the user is logged in and wants to view the Login Page, redirect to the home page
         if (user && Component == Login) {
-          return <Home />;
+          return <Home {...pageProps}/>;
         }
         // If the user is logged in and is not viewing the Login Page, render the requested page
         if (user) {
