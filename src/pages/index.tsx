@@ -42,7 +42,7 @@ export async function getServerSideProps(context: NextPageContext) {
       props: {
         data: {
           results: data,
-          ...metaData
+          ...metaData,
         },
         error: null,
       },
@@ -51,7 +51,7 @@ export async function getServerSideProps(context: NextPageContext) {
     return {
       props: {
         data: null,
-        error: error?.message || "An error occurred. Please try again later.",
+        error,
       },
     };
   }
