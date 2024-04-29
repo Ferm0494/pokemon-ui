@@ -1,11 +1,8 @@
-import { useRouter } from "next/router";
 import React, {
   createContext,
   useState,
   useEffect,
-  ReactChildren,
   ReactNode,
-  useCallback,
 } from "react";
 
 interface User {
@@ -31,7 +28,6 @@ export const AuthContext = createContext<AuthContextProps>({
 const AuthProvider: React.FC<{ children: (props: AuthProps) => ReactNode }> = ({
   children,
 }) => {
-//   const navigator = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

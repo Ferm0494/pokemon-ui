@@ -1,6 +1,6 @@
 import { AuthContext } from "@/context/AuthProvider";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 
 const Login = () => {
   const { login, loading } = useContext(AuthContext);
