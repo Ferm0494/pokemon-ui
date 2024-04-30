@@ -1,10 +1,9 @@
 import { InferGetStaticPropsType } from "next";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { getPokemonTypes } from "@/services/pokemon";
 import { TypeResponse } from "@/types";
-import Card from "@/components/Pokemon/Card";
-import Spinner from "@/components/Spinner";
+import { Spinner, PokemonCard } from "@/components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -22,6 +21,8 @@ const TypeSearch = ({
   const [error, setError] = useState("");
   const [data, setData] = useState<TypeResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const endOfFavorableList = useRef<HTMLAnchorElement>(null);
+  const endOfUnfavorableList = useRef<HTMLAnchorElement>(null);
 
   const handleSearchTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -84,13 +85,21 @@ const TypeSearch = ({
     new RegExp(searchText, "i").test(type)
   );
 
+  useEffect(() => {
+    endOfFavorableList.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data?.favorableMatches?.length]);
+
+  useEffect(() => {
+    endOfUnfavorableList.current?.scrollIntoView({ behavior: "smooth" });
+  }, [data?.unfavorableMatches?.length]);
+
   return (
     <div>
       {error && (
         <div className="mb-4 p-2 bg-red-500 text-white rounded">{error}</div>
       )}
       <div className="flex flex-col items-center justify-center p-8 w-full max-w-md mx-auto">
-        <h1 className="text-2xl mb-4">Search by Type</h1>
+        <h1 className="text-4xl mb-4">Search by Type</h1>
         <input
           type="text"
           value={searchText}
@@ -100,7 +109,7 @@ const TypeSearch = ({
         {searchText &&
           showDropdown &&
           (filteredTypes.length > 0 ? (
-            <ul className="mt-1 w-full border border-gray-300 rounded divide-y divide-gray-300">
+            <ul className="w-full border border-gray-300 rounded divide-y divide-gray-300">
               {filteredTypes.map((type) => (
                 <li
                   key={type}
@@ -118,43 +127,69 @@ const TypeSearch = ({
       {loading && !data && <Spinner />}
       {data && (
         <div className="mt-4 w-full p-5">
-          <h2 className="text-xl mb-2">Favorable Matches</h2>
-          <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4">
-            {data.favorableMatches.map((match) => (
-              <Card key={match.id} {...match} href={`/pokemon/${match.id}`} />
-            ))}
-            <div>
-              {loading ? (
-                <Spinner size="sm" />
-              ) : (
-                <button
-                  onClick={() =>
-                    handleLoadMorePokemons(LoadPokemonArgsEnum.FAVORABLE)
-                  }
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              )}
+          <div>
+            <h2 className="text-xl mb-2">Favorable Matches</h2>
+            <div className="flex">
+              <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4 flex-1">
+                {data.favorableMatches.map((match, index) => (
+                  <PokemonCard
+                    {...match}
+                    key={match.id}
+                    href={`/pokemon/${match.id}`}
+                    ref={
+                      index === data.favorableMatches.length - 1
+                        ? endOfFavorableList
+                        : undefined
+                    }
+                  />
+                ))}
+              </div>
+              <div className="self-center">
+                {loading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleLoadMorePokemons(LoadPokemonArgsEnum.FAVORABLE)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faArrowRight} size="2xl" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-          <h2 className="text-xl mt-4 mb-2">Unfavorable Matches</h2>
-          <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4">
-            {data.unfavorableMatches.map((match) => (
-              <Card key={match.id} {...match} href={`/pokemon/${match.id}`} />
-            ))}
-          </div>
           <div>
-            {loading ? (
-              <Spinner size="sm" />
-            ) : (
-              <button
-                onClick={() =>
-                  handleLoadMorePokemons(LoadPokemonArgsEnum.UNFAVORABLE)
-                }
-              >
-                <FontAwesomeIcon icon={faArrowRight} />
-              </button>
-            )}
+            <h2 className="text-xl mb-2">Unfavorable Matches</h2>
+            <div className="flex">
+              <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4 flex-1">
+                {data.unfavorableMatches.map((match, index) => (
+                  <PokemonCard
+                    {...match}
+                    key={match.id}
+                    href={`/pokemon/${match.id}`}
+                    ref={
+                      index === data.unfavorableMatches.length - 1
+                        ? endOfUnfavorableList
+                        : undefined
+                    }
+                  />
+                ))}
+              </div>
+              <div className="self-center">
+                {loading ? (
+                  <Spinner size="sm" />
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleLoadMorePokemons(LoadPokemonArgsEnum.UNFAVORABLE)
+                    }
+                  >
+                    <FontAwesomeIcon icon={faArrowRight} size="2xl" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
