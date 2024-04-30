@@ -1,11 +1,11 @@
 import { InferGetStaticPropsType } from "next";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import axios from "axios";
 import { getPokemonTypes } from "@/services/pokemon";
 import { TypeResponse } from "@/types";
-import { Spinner, PokemonCard } from "@/components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Spinner } from "@/components";
+import PokemonMatches from "@/layouts/PokemonMatches";
 
 enum LoadPokemonArgsEnum {
   FAVORABLE = "favorable",
@@ -21,8 +21,8 @@ const TypeSearch = ({
   const [error, setError] = useState("");
   const [data, setData] = useState<TypeResponse | null>(null);
   const [loading, setLoading] = useState(false);
-  const endOfFavorableList = useRef<HTMLAnchorElement>(null);
-  const endOfUnfavorableList = useRef<HTMLAnchorElement>(null);
+  const lastFavorableCardRef = useRef<HTMLAnchorElement>(null);
+  const lastUnfavorableCardRef = useRef<HTMLAnchorElement>(null);
 
   const handleSearchTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -86,11 +86,11 @@ const TypeSearch = ({
   );
 
   useEffect(() => {
-    endOfFavorableList.current?.scrollIntoView({ behavior: "smooth" });
+    lastFavorableCardRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [data?.favorableMatches?.length]);
 
   useEffect(() => {
-    endOfUnfavorableList.current?.scrollIntoView({ behavior: "smooth" });
+    lastUnfavorableCardRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [data?.unfavorableMatches?.length]);
 
   return (
@@ -106,6 +106,9 @@ const TypeSearch = ({
           onChange={handleSearchTextChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
+        <Link href="/" className="mt-3  text-blue-500 hover:underline ">
+          Go Back?{" "}
+        </Link>
         {searchText &&
           showDropdown &&
           (filteredTypes.length > 0 ? (
@@ -127,70 +130,24 @@ const TypeSearch = ({
       {loading && !data && <Spinner />}
       {data && (
         <div className="mt-4 w-full p-5">
-          <div>
-            <h2 className="text-xl mb-2">Favorable Matches</h2>
-            <div className="flex">
-              <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4 flex-1">
-                {data.favorableMatches.map((match, index) => (
-                  <PokemonCard
-                    {...match}
-                    key={match.id}
-                    href={`/pokemon/${match.id}`}
-                    ref={
-                      index === data.favorableMatches.length - 1
-                        ? endOfFavorableList
-                        : undefined
-                    }
-                  />
-                ))}
-              </div>
-              <div className="self-center">
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <button
-                    onClick={() =>
-                      handleLoadMorePokemons(LoadPokemonArgsEnum.FAVORABLE)
-                    }
-                  >
-                    <FontAwesomeIcon icon={faArrowRight} size="2xl" />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 className="text-xl mb-2">Unfavorable Matches</h2>
-            <div className="flex">
-              <div className="p-3 flex flex-row overflow-x-auto whitespace-nowrap gap-4 flex-1">
-                {data.unfavorableMatches.map((match, index) => (
-                  <PokemonCard
-                    {...match}
-                    key={match.id}
-                    href={`/pokemon/${match.id}`}
-                    ref={
-                      index === data.unfavorableMatches.length - 1
-                        ? endOfUnfavorableList
-                        : undefined
-                    }
-                  />
-                ))}
-              </div>
-              <div className="self-center">
-                {loading ? (
-                  <Spinner size="sm" />
-                ) : (
-                  <button
-                    onClick={() =>
-                      handleLoadMorePokemons(LoadPokemonArgsEnum.UNFAVORABLE)
-                    }
-                  >
-                    <FontAwesomeIcon icon={faArrowRight} size="2xl" />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+          <PokemonMatches
+            data={data.favorableMatches}
+            title="Favorable Matches"
+            ref={lastFavorableCardRef}
+            handleLoadMorePokemons={() =>
+              handleLoadMorePokemons(LoadPokemonArgsEnum.FAVORABLE)
+            }
+            loading={loading}
+          />
+          <PokemonMatches
+            data={data.unfavorableMatches}
+            title="Unfavorable Matches"
+            ref={lastUnfavorableCardRef}
+            handleLoadMorePokemons={() =>
+              handleLoadMorePokemons(LoadPokemonArgsEnum.UNFAVORABLE)
+            }
+            loading={loading}
+          />
         </div>
       )}
     </div>

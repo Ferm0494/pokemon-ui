@@ -1,5 +1,8 @@
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { DetailedPokemon } from "@/types";
+import Link from "next/link";
 
 const PokemonDetail: React.FC<DetailedPokemon> = (props) => {
   const image =
@@ -9,13 +12,19 @@ const PokemonDetail: React.FC<DetailedPokemon> = (props) => {
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-4">
+      <Link
+        href="/"
+        className="mt-3 text-blue-500 hover:underline flex items-center p-5"
+      >
+        <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+         Back
+      </Link>
       <div className="md:flex">
         <div className="md:flex-shrink-0">
           <Image
-            className="object-cover md:w-48"
+            className="object-cover md:w-64 self-center mt-10"
             src={image}
             alt={props.name}
-            layout="responsive"
             width={200}
             height={200}
           />
