@@ -1,13 +1,15 @@
+export type PokemonDetailsParams = {
+  id?: string | number;
+  url?: string;
+};
+
+export type PokemonByType = { pokemon: { pokemon: MetaData; slot: number }[] };
+
 export interface BaseResponse {
   count: number;
   next: string | null;
   previous: string | null;
 }
-
-export type PokemonDetailsParams = {
-  id?: string | number;
-  url?: string;
-};
 
 export interface MetaData {
   name: string;

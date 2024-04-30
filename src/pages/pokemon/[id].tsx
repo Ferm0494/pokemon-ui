@@ -1,6 +1,6 @@
 import { PokemonDetail } from "@/components";
 import { getPokemonDetails } from "@/services/pokemon";
-import { GetStaticPaths, InferGetStaticPropsType } from "next";
+import { GetStaticPaths, GetStaticPropsContext, InferGetStaticPropsType } from "next";
 
 
 const PokemonPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -27,7 +27,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps = async ({
   params,
-}) => {
+}: GetStaticPropsContext) => {
   const { id } = params as { id: string };
   try {
     const pokemonData = await getPokemonDetails({

@@ -6,6 +6,8 @@ import {
   Pokemon,
   PokemonDetailsParams,
   PokemonList,
+  MetaData,
+  PokemonByType,
 } from "@/types";
 //  We can store this in a process.env but for sake of simplicity I'm going to put it here.
 const BASE_URL = "https://pokeapi.co/api/v2";
@@ -25,7 +27,6 @@ export async function getPokemonList(pagination: Pagination): Promise<
       getPokemonDetails({ url: pokemon.url })
     )
   );
-  //   console.log("Fer", pokemonList)
   return {
     data: pokemonList,
     limit: pagination.limit,
@@ -71,4 +72,18 @@ export async function getPokemonDetails({
       sprites.other["home"].front_default ||
       sprites.front_default,
   };
+}
+export async function getPokemonTypes(): Promise<string[]> {
+  const response = await axios.get<BaseResponse & { results: MetaData[] }>(
+    `${BASE_URL}/type`
+  );
+  return response.data.results.map(({ name }) => name);
+}
+export async function getPokemonsByType(
+  type: string,
+): Promise<PokemonByType> {
+  const response = await axios.get<PokemonByType>(
+    `${BASE_URL}/type/${type}`
+  );
+  return response.data;
 }

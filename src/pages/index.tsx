@@ -19,6 +19,9 @@ export default function Home(
       <p className="text-lg text-center text-gray-600 mb-8">
         Shows a list of pokemons
       </p>
+      <Link href="/type" className="text-blue-500 hover:text-blue-700">
+        Search by Type
+      </Link>
       <div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {props.data?.results.map((pokemon) => (
@@ -37,17 +40,11 @@ export default function Home(
           <Link
             key={page}
             href={`/?limit=${limit}&offset=${(page - 1) * limit}`}
-            legacyBehavior
+            className={`px-4 py-2 border rounded ${
+              currentPage === page ? "bg-blue-500 text-white" : "text-blue-500"
+            }`}
           >
-            <a
-              className={`px-4 py-2 border rounded ${
-                currentPage === page
-                  ? "bg-blue-500 text-white"
-                  : "text-blue-500"
-              }`}
-            >
-              {page}
-            </a>
+            {page}
           </Link>
         ))}
       </div>
