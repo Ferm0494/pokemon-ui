@@ -43,7 +43,7 @@ const TypeSearch = ({
       />
       {searchText && showDropdown && (
         filteredTypes.length > 0 ? (
-          <ul className="mt-1 w-full border border-gray-300 rounded divide-y divide-gray-300">
+          <ul className="w-full border border-gray-300 rounded divide-y divide-gray-300">
             {filteredTypes.map((type) => (
               <li
                 key={type}
