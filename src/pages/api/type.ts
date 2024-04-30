@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getPokemonDetails, getPokemonsByType } from "@/services/pokemon";
-import { MetaData, PokemonByType } from "@/types";
+import { MetaData } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,16 +9,22 @@ export default async function handler(
   const PAGE_SIZE = 3;
   const { type, page = "1", matches } = req.query;
   if (!type) {
-    return res.status(400).json({ name: "Type is required" });
+    return res.status(400).json({ name: 'BAD_REQUEST', error: { message: 'Type QUERY param is required'} });
   }
 
   const pageNumber = parseFloat(page as string);
   if (!Number.isInteger(pageNumber) || pageNumber < 1) {
-    return res.status(400).json({ name: "Invalid page number" });
+    return res.status(400).json({
+      name: 'BAD_REQUEST',
+      error: { message: 'Page QUERY param must be a positive integer' },
+    })
   }
 
   if (matches && matches !== "favorable" && matches !== "unfavorable") {
-    return res.status(400).json({ name: "Invalid matches parameter" });
+    return res.status(400).json({
+      name: 'BAD_REQUEST',
+      error: { message: 'Matches QUERY param must be either "favorable" or "unfavorable"' },
+    })
   }
   try {
     const pokemons = await getPokemonsByType(type as string);
@@ -54,13 +60,14 @@ export default async function handler(
     return res.json({
       favorableMatches: await Promise.all(
         favorableMatches.map((pokemon) =>
-          getPokemonDetails({ url: pokemon.url})
+          getPokemonDetails({ url: pokemon.url })
         )
       ),
       unfavorableMatches: await Promise.all(
         unfavorableMatches.map((pokemon) =>
-          getPokemonDetails({ url: pokemon.url})
-        )),
+          getPokemonDetails({ url: pokemon.url })
+        )
+      ),
     });
   } catch (error) {
     console.error(error);
