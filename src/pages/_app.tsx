@@ -4,6 +4,7 @@ import Login from "./auth/login";
 import Home from "./";
 import Error from "@/layouts/Error";
 import "@/styles/globals.css";
+import { Spinner } from "@/components";
 
 export default function App({ Component, pageProps }: AppProps) {
   if (pageProps.error) {
@@ -13,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <AuthProvider>
       {({ user, loading }) => {
         if (loading) {
-          return <div>Loading...</div>;
+          return <Spinner />
         }
         // If the user is logged in and wants to view the Login Page, redirect to the home page
         if (user && Component == Login) {

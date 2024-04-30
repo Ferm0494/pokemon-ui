@@ -105,7 +105,6 @@ const TypeSearch = ({
           onChange={handleSearchTextChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
-        <BackLink href="/"/>
         {searchText &&
           showDropdown &&
           (filteredTypes.length > 0 ? (
@@ -123,6 +122,7 @@ const TypeSearch = ({
           ) : (
             <p className="mt-1 text-gray-500">No type was found</p>
           ))}
+          <BackLink href="/"/>
       </div>
       {loading && !data && <Spinner />}
       {data && (
