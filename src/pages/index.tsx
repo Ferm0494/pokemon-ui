@@ -19,7 +19,7 @@ export default function Home(
       <p className="text-lg text-center text-gray-600 mb-8">
         Shows a list of pokemons
       </p>
-      <Link href="/type" className="text-blue-500 hover:text-blue-700">
+      <Link href="/detail" className="text-blue-500 hover:text-blue-700">
         Search by Type
       </Link>
       <div>

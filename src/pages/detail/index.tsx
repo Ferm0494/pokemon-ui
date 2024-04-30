@@ -1,10 +1,9 @@
 import { InferGetStaticPropsType } from "next";
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import axios from "axios";
 import { getPokemonTypes } from "@/services/pokemon";
 import { TypeResponse } from "@/types";
-import { Spinner } from "@/components";
+import { BackLink, Spinner } from "@/components";
 import PokemonMatches from "@/layouts/PokemonMatches";
 
 enum LoadPokemonArgsEnum {
@@ -106,9 +105,7 @@ const TypeSearch = ({
           onChange={handleSearchTextChange}
           className="w-full p-2 border border-gray-300 rounded"
         />
-        <Link href="/" className="mt-3  text-blue-500 hover:underline ">
-          Go Back?{" "}
-        </Link>
+        <BackLink href="/"/>
         {searchText &&
           showDropdown &&
           (filteredTypes.length > 0 ? (
