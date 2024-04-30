@@ -4,6 +4,17 @@ This project is a user interface for a Pokemon application. It allows users to b
 
 - This project consumes [PokeAPI](https://pokeapi.co/)
 
+![Preview1](./public/preview1.png)
+
+---
+
+![Preview2](./public/preview2.png)
+
+---
+
+![Preview3](./public/preview3.png)
+
+
 ## Installation
 
 To get started with the Pokemon UI project, follow these steps:
