@@ -1,9 +1,8 @@
 # Pokemon UI
 
-This project is a user interface for a Pokemon application. It allows users to browse and search for different Pokemon, view their details, and perform various actions related to Pokemon. For simplicity authentication is based on a name and it's being stored in [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
+This project is a user interface for a Pokemon application. It allows users to browse and search for different Pokemon, view their details, and perform various actions related to Pokemon. For simplicity **authentication** is based on a name and it's being stored in [Session Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
 
 - This project consumes [PokeAPI](https://pokeapi.co/)
-
 
 ## Installation
 
@@ -34,6 +33,7 @@ To run the Pokemon UI application, use the following command:
     pnpm dev
     ```
 ## Stack Used
+
 1. NextJS
 2. React
 3. TypeScript
